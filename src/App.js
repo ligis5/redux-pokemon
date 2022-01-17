@@ -1,24 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import Pokemons from "./Pokemons";
+import { Provider } from "react-redux";
+import configureStore from "./store/configureStore";
+
+const store = configureStore();
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Pokemons />
+    </Provider>
   );
 }
 
