@@ -10,12 +10,9 @@ const slice = createSlice({
     },
     loggedIn: false,
     userLoading: false,
+    myPokemons: [],
   },
   reducers: {
-    userCreated: (user, action) => {
-      const { username, password } = action.payload.user;
-      localStorage.setItem("user", `${username}<>${password}`);
-    },
     userLoggedIn: (user, action) => {
       user.details.username = action.payload.user.username;
       user.details.password = action.payload.user.password;
