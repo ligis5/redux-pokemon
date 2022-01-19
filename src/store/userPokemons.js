@@ -6,6 +6,7 @@ const slice = createSlice({
   initialState: {
     pokemons: [],
     loading: false,
+    error: null,
   },
   reducers: {
     userRequestedPokemon: (userPokemons, action) => {
@@ -13,6 +14,7 @@ const slice = createSlice({
     },
     userPokemonRequestFailed: (userPokemons, action) => {
       userPokemons.loading = false;
+      userPokemons.error = action.payload.error;
     },
     allUserPokemons: (userPokemons, action) => {
       userPokemons.pokemons.push(...action.payload.pokemons);
@@ -23,7 +25,14 @@ const slice = createSlice({
       userPokemons.loading = false;
     },
     userRemovedPokemon: (userPokemons, action) => {
-      userPokemons.pokemons.splice(action.payload.name);
+      const index = userPokemons.pokemons.indexOf(
+        (pokemon) => pokemon === action.payload.name
+      );
+      userPokemons.pokemons.splice(index, 1);
+      userPokemons.loading = false;
+    },
+    userRemovedPokemons: (userPokemons, action) => {
+      userPokemons.pokemons = [];
       userPokemons.loading = false;
     },
   },
@@ -32,6 +41,7 @@ const slice = createSlice({
 const {
   userAddedPokemon,
   userRemovedPokemon,
+  userRemovedPokemons,
   userRequestedPokemon,
   userPokemonRequestFailed,
   allUserPokemons,
@@ -69,6 +79,17 @@ export const removePokemon = (name) => (dispatch) => {
       onSuccess: userRemovedPokemon.type,
       onError: userPokemonRequestFailed.type,
       name,
+      method: "delete",
+    })
+  );
+};
+
+export const removePokemons = () => (dispatch) => {
+  dispatch(
+    userPokemonsCallBegan({
+      onStart: userRequestedPokemon.type,
+      onSuccess: userRemovedPokemons.type,
+      onError: userPokemonRequestFailed.type,
       method: "delete",
     })
   );

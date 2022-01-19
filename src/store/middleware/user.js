@@ -1,22 +1,34 @@
 import * as actions from "../userActions";
-import { getPokemons } from "../pokemons";
-import { getUserPokemons } from "../userPokemons";
+import { getPokemons, removeAllPokemons } from "../pokemons";
+import { getUserPokemons, removePokemons } from "../userPokemons";
 
 const userApi =
-  ({ dispatch }) =>
+  ({ dispatch, getState }) =>
   (next) =>
   (action) => {
     // goes to next task if userCallBegan was not called
     if (action.type !== actions.userCallBegan.type) return next(action);
 
-    const { onStart, onSuccess, onError, data } = action.payload;
+    const { onStart, onSuccess, onError, data, method } = action.payload;
     next(action);
     //requestUser, userLoading: true
     if (onStart) dispatch({ type: onStart });
+    // log out, clear my pokemons, clear all pokemons
+    if (method === "logout") {
+      dispatch(actions.userCallSuccess());
 
-    if (data) {
-      // create user
+      if (onSuccess) dispatch({ type: onSuccess });
+      if (onSuccess) {
+        dispatch(removePokemons());
+        dispatch(removeAllPokemons());
+        return dispatch({ type: onSuccess });
+      }
+    }
+
+    // create user
+    if (method === "create")
       localStorage.setItem("user", `${data.username}<>${data.password}`);
+    if (method === "login" || method === "create") {
       // call for user login
       dispatch(actions.userCallSuccess({ user: data }));
       // login user

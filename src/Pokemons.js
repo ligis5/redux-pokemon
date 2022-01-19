@@ -1,16 +1,13 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import { getPokemons, removePokemons } from "./store/pokemons";
-import { createUser, loginUser } from "./store/user";
 import { addPokemon } from "./store/userPokemons";
+import { Container, ListGroup, Button } from "react-bootstrap";
 let currentPage = 0;
 const Pokemons = () => {
   const dispatch = useDispatch();
   const store = useSelector((store) => store);
-
-  useEffect(() => {
-    dispatch(loginUser({ username: "Lukas", password: "Lukas" }));
-  }, []);
 
   const addPage = () => {
     currentPage++;
@@ -21,43 +18,41 @@ const Pokemons = () => {
     if (currentPage > 0) currentPage--;
     else return;
   };
-  console.log(store);
   const add = (name) => {
     dispatch(addPokemon(name));
   };
   return (
-    <div>
-      <ul style={{ width: "max-content" }}>
-        {store.userPokemons.pokemons.map((pokemon) => (
-          <li
-            key={"user" + pokemon}
-            style={{ display: "flex", marginTop: "5px" }}
-          >
-            {pokemon}
-          </li>
-        ))}
-      </ul>
-      <button onClick={removePage}>Show less</button>
-      <ul style={{ width: "max-content" }}>
+    <Container fluid>
+      <Link to="/user-pokemons">
+        <h3 style={{ textAlign: "end" }}>
+          My pokemons {store.userPokemons.pokemons.length}
+        </h3>
+      </Link>
+      <h1 style={{ textAlign: "center" }}>All Pokemons</h1>
+      <ListGroup>
+        <Button variant="outline-primary" onClick={removePage}>
+          Show less
+        </Button>
         {store.pokemons.list.map((list) =>
           list.map((pokemon) => (
-            <li
-              key={pokemon.name}
-              style={{ display: "flex", marginTop: "5px" }}
-            >
+            <ListGroup.Item key={pokemon.name} style={{ display: "flex" }}>
               {pokemon.name}{" "}
-              <button
+              <Button
                 style={{ marginLeft: "auto" }}
+                variant="outline-primary"
                 onClick={() => add(pokemon.name)}
               >
                 add
-              </button>
-            </li>
+              </Button>
+            </ListGroup.Item>
           ))
         )}
-      </ul>
-      <button onClick={addPage}>Show more</button>
-    </div>
+
+        <Button variant="outline-primary" onClick={addPage}>
+          Show more
+        </Button>
+      </ListGroup>
+    </Container>
   );
 };
 

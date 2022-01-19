@@ -10,7 +10,6 @@ const slice = createSlice({
     },
     loggedIn: false,
     userLoading: false,
-    myPokemons: [],
   },
   reducers: {
     userLoggedIn: (user, action) => {
@@ -26,7 +25,8 @@ const slice = createSlice({
     userLoggedOut: (user, action) => {
       user.loggedIn = false;
       user.userLoading = false;
-      user.details = [];
+      user.details.username = "";
+      user.details.password = "";
     },
     userRequested: (user, action) => {
       user.userLoading = true;
@@ -36,7 +36,7 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-const { userCreated, userLoggedIn, userRequested, userLogInFailed } =
+const { userLoggedOut, userLoggedIn, userRequested, userLogInFailed } =
   slice.actions;
 
 export const createUser = (data) => (dispatch) => {
@@ -44,9 +44,9 @@ export const createUser = (data) => (dispatch) => {
     userCallBegan({
       onStart: userRequested.type,
       data,
-      onUserCreated: userCreated.type,
       onSuccess: userLoggedIn.type,
       onError: userLogInFailed.type,
+      method: "create",
     })
   );
 };
@@ -58,6 +58,18 @@ export const loginUser = (data) => (dispatch) => {
       onSuccess: userLoggedIn.type,
       onError: userLogInFailed.type,
       data,
+      method: "login",
+    })
+  );
+};
+
+export const logOut = () => (dispatch) => {
+  dispatch(
+    userCallBegan({
+      onStart: userRequested.type,
+      onSuccess: userLoggedOut.type,
+      onError: userLogInFailed.type,
+      method: "logout",
     })
   );
 };

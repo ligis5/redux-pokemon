@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { apiCallBegan } from "./apiActions";
-import { createSelector } from "reselect";
 
 const slice = createSlice({
   name: "pokemons",
@@ -28,6 +27,9 @@ const slice = createSlice({
     pokemonsRemoved: (pokemons, action) => {
       pokemons.list.splice(action.payload.page);
     },
+    allPokemonsRemoved: (pokemons, action) => {
+      pokemons.list = [];
+    },
   },
 });
 
@@ -36,6 +38,7 @@ const {
   pokemonsRequested,
   pokemonsRequestFailed,
   pokemonsRemoved,
+  allPokemonsRemoved,
 } = slice.actions;
 
 export default slice.reducer;
@@ -62,7 +65,7 @@ export const removePokemons = (page) => (dispatch) => {
   dispatch({ type: pokemonsRemoved.type, payload: { page } });
 };
 
-// memoized call
-// export const getMyPokemons = () => createSelector(
-//   (state) => state.entities.
-// )
+export const removeAllPokemons = (page) => (dispatch) => {
+  if (page <= 0) return;
+  dispatch({ type: allPokemonsRemoved.type });
+};
