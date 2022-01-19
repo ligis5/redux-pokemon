@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/ligis5/redux-pokemon/static/css/main.56e6221f.css",
+    "main.js": "/ligis5/redux-pokemon/static/js/main.53dc7b23.js",
+    "static/js/787.ca3f0224.chunk.js": "/ligis5/redux-pokemon/static/js/787.ca3f0224.chunk.js",
+    "index.html": "/ligis5/redux-pokemon/index.html",
+    "main.56e6221f.css.map": "/ligis5/redux-pokemon/static/css/main.56e6221f.css.map",
+    "main.53dc7b23.js.map": "/ligis5/redux-pokemon/static/js/main.53dc7b23.js.map",
+    "787.ca3f0224.chunk.js.map": "/ligis5/redux-pokemon/static/js/787.ca3f0224.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.56e6221f.css",
+    "static/js/main.53dc7b23.js"
+  ]
+}
