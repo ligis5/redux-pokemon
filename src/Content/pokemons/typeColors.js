@@ -11,7 +11,7 @@ export const typeColors = [
   { water: "rgb(85, 174, 254)" },
   { bug: "rgb(195, 210, 31)" },
   { dark: "rgb(140, 103, 84)" },
-  { fightining: "rgb(166, 86, 71)" },
+  { fighting: "rgb(166, 86, 71)" },
   { ghost: "rgb(121, 117, 214)" },
   { steel: "rgb(196, 194, 218)" },
   { flying: "rgb(123, 164, 255)" },
