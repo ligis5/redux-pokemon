@@ -2,19 +2,26 @@ import React, { useRef, useState, useEffect } from "react";
 import { Form, Button, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../store/user/user";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const store = useSelector((store) => store.user);
+  const user = useSelector((store) => store.user);
 
   const emailRef = useRef();
   const passwordRef = useRef();
   const [err, setErr] = useState("none");
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    if (store.error) setErr("");
+    if (user.error) setErr("");
     return () => setErr("none");
-  }, [store.error]);
+  }, [user.error]);
+
+  useEffect(() => {
+    if (user.loggedIn) navigate("/pokemons");
+  }, [user.loggedIn]);
 
   const login = (e) => {
     let email = emailRef.current.value;
@@ -45,7 +52,7 @@ const Login = () => {
               color: "#da1c1c",
             }}
           >
-            {store.error}
+            {user.error}
           </p>
         </Form.Label>
         <Form.Group>

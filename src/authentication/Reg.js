@@ -1,12 +1,12 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Form, Button, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { createUser } from "../store/user/user";
 
 const Register = () => {
   const dispatch = useDispatch();
-  const store = useSelector((store) => store.user);
-  console.log(store);
+  const user = useSelector((store) => store.user);
 
   const emailRef = useRef();
   const regPassRef = useRef();
@@ -14,6 +14,12 @@ const Register = () => {
   const [pswDontMatch, setPswDontMatch] = useState("none");
   const [pswShort, setPswShort] = useState("none");
   const [emailInUse, setEmailInUse] = useState("none");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user.loggedIn) navigate("/pokemons");
+  }, [user.loggedIn]);
 
   const register = async (e) => {
     let email = emailRef.current.value;
@@ -33,7 +39,7 @@ const Register = () => {
         })
       );
       // if user exists show text email already in use
-      if (store.error === "Email is already in use") setEmailInUse("");
+      if (user.error === "Email is already in use") setEmailInUse("");
       else setEmailInUse("none");
     } else {
       // set display to empty to show passwords don't match text
@@ -58,7 +64,7 @@ const Register = () => {
               color: "#da1c1c",
             }}
           >
-            {store.error}
+            user.error}
           </p>
         </Form.Label>
         <Form.Group>
