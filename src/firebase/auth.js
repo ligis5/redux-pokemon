@@ -3,6 +3,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 const auth = getAuth();
@@ -39,4 +40,17 @@ export const loginWithEmail = async (email, password) => {
     const errorMessage = error.message;
     return errorCode;
   }
+};
+
+export const loginPersistence = () => {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        resolve(user);
+      }
+      // user is signed out
+      else resolve("No user found");
+      unsubscribe();
+    });
+  });
 };

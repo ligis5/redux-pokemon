@@ -6,7 +6,7 @@ const slice = createSlice({
   initialState: {
     details: {
       email: "",
-      password: "",
+      uid: "",
     },
     error: "",
     loggedIn: false,
@@ -15,7 +15,7 @@ const slice = createSlice({
   reducers: {
     userLoggedIn: (user, action) => {
       user.details.email = action.payload.user.email;
-      user.details.password = action.payload.user.password;
+      user.details.uid = action.payload.user.uid;
       user.loggedIn = true;
       user.userLoading = false;
       user.error = "";
@@ -27,7 +27,7 @@ const slice = createSlice({
     },
     userLoggedOut: (user, action) => {
       user.details.email = "";
-      user.details.password = "";
+      user.details.uid = "";
       user.loggedIn = false;
       user.userLoading = false;
       user.error = "";
@@ -41,6 +41,18 @@ export default slice.reducer;
 
 const { userLoggedIn, userLoginFailed, userLoggedOut, userRequested } =
   slice.actions;
+
+// login persistence
+export const checkIfLoggedIn = () => (dispatch) => {
+  dispatch(
+    userCallBegan({
+      onStart: userRequested.type,
+      onSuccess: userLoggedIn.type,
+      onError: userLoginFailed.type,
+      method: "check",
+    })
+  );
+};
 
 export const createUser = (data) => (dispatch) => {
   dispatch(

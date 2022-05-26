@@ -1,5 +1,9 @@
 import * as actions from "../user/userActions";
-import { registerWithEmail, loginWithEmail } from "../../firebase/auth";
+import {
+  registerWithEmail,
+  loginWithEmail,
+  loginPersistence,
+} from "../../firebase/auth";
 
 const userApi =
   ({ dispatch, getState }) =>
@@ -18,6 +22,23 @@ const userApi =
 
       if (onSuccess) dispatch({ type: onSuccess });
       if (onSuccess) console.log("loggedOut");
+    }
+
+    if (method === "check") {
+      const user = await loginPersistence();
+      if (user === "No user found") {
+        dispatch(actions.userCallFailed());
+        dispatch({ type: onError, payload: "No user found" });
+        return;
+      }
+      let userData = { uid: user.uid, email: user.email };
+
+      //call for user login
+      dispatch(actions.userCallSuccess({ user: userData }));
+
+      if (onSuccess) {
+        dispatch({ type: onSuccess, payload: { user: userData } });
+      } else dispatch({ type: onError, payload: "error logging in" });
     }
 
     //create user
@@ -42,14 +63,13 @@ const userApi =
         dispatch({ type: onError, payload: "User not found" });
         return;
       }
+      let userData = { uid: user.uid, email: user.email };
       //call for user login
-      dispatch(actions.userCallSuccess({ user: data }));
+      dispatch(actions.userCallSuccess({ user: userData }));
       //login user
       if (onSuccess) {
-        dispatch({ type: onSuccess, payload: { user: data } });
+        dispatch({ type: onSuccess, payload: { user: userData } });
       } else dispatch({ type: onError, payload: "error logging in" });
-    } else {
-      dispatch({ type: onError, payload: "Error setting up user" });
     }
   };
 
