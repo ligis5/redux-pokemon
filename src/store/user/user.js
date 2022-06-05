@@ -11,6 +11,8 @@ const slice = createSlice({
     error: "",
     loggedIn: false,
     userLoading: false,
+    requestLoaded: false,
+    manualLogout: false,
   },
   reducers: {
     userLoggedIn: (user, action) => {
@@ -18,11 +20,13 @@ const slice = createSlice({
       user.details.uid = action.payload.user.uid;
       user.loggedIn = true;
       user.userLoading = false;
+      user.requestLoaded = true;
       user.error = "";
     },
     userLoginFailed: (user, action) => {
       user.loggedIn = false;
       user.userLoading = false;
+      user.requestLoaded = true;
       user.error = action.payload;
     },
     userLoggedOut: (user, action) => {
@@ -30,6 +34,7 @@ const slice = createSlice({
       user.details.uid = "";
       user.loggedIn = false;
       user.userLoading = false;
+      user.manualLogout = true;
       user.error = "";
     },
     userRequested: (user, action) => {
@@ -78,12 +83,11 @@ export const loginUser = (data) => (dispatch) => {
   );
 };
 
-export const logOut = () => (dispatch) => {
+export const logoutUser = () => (dispatch) => {
   dispatch(
     userCallBegan({
       onStart: userRequested.type,
       onSuccess: userLoggedOut.type,
-      onError: userLoginFailed.type,
       onError: userLoginFailed.type,
       method: "logout",
     })

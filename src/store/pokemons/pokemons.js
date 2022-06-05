@@ -29,6 +29,9 @@ const slice = createSlice({
     },
     allPokemonsRemoved: (pokemons, action) => {
       pokemons.list = [];
+      pokemons.loaded = false;
+      pokemons.loading = false;
+      pokemons.error = "";
     },
   },
 });
@@ -56,7 +59,6 @@ export const getPokemons = (page) => (disptach, getState) => {
   );
 };
 
-export const removePokemons = (page) => (disptach) => {
-  if (page < 2) return;
-  disptach({ type: pokemonsRemoved.type, payload: { page } });
+export const clearPokemons = (page) => (disptach) => {
+  disptach({ type: allPokemonsRemoved.type, payload: { page } });
 };

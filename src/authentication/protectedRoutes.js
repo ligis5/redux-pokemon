@@ -6,6 +6,8 @@ export const ProtectedRoutes = ({ children }) => {
   const dispatch = useDispatch();
   const user = useSelector((store) => store.user);
 
-  if (!user.loggedIn) return <Navigate to="/login" replace />;
+  // requestLoaded will be true if user logged in and if user failed to log in,
+  if (!user.loggedIn && user.requestLoaded)
+    return <Navigate to="/login" replace />;
   else return children;
 };

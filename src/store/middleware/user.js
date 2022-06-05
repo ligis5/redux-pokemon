@@ -3,7 +3,9 @@ import {
   registerWithEmail,
   loginWithEmail,
   loginPersistence,
+  logoutUser,
 } from "../../firebase/auth";
+import { clearPokemons } from "../pokemons/pokemons";
 
 const userApi =
   ({ dispatch, getState }) =>
@@ -16,12 +18,16 @@ const userApi =
     next(action);
     //requestUser, userLoading: true
     if (onStart) dispatch({ type: onStart });
+
     //log out, clear my pokemons, clear all pokemons
     if (method === "logout") {
       dispatch(actions.userCallSuccess());
-
-      if (onSuccess) dispatch({ type: onSuccess });
-      if (onSuccess) console.log("loggedOut");
+      console.log("hi");
+      if (onSuccess) {
+        logoutUser();
+        dispatch({ type: onSuccess });
+      }
+      if (onSuccess) dispatch(clearPokemons());
     }
 
     if (method === "check") {

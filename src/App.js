@@ -18,11 +18,11 @@ function App() {
           <Route
             path="/pokemons"
             element={
-              <ProtectedRoutes>
-                <Layout>
+              <Layout>
+                <ProtectedRoutes>
                   <Pokemons />
-                </Layout>
-              </ProtectedRoutes>
+                </ProtectedRoutes>
+              </Layout>
             }
           />
           <Route

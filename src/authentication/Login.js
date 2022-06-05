@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Form, Button, Container, Row } from "react-bootstrap";
+import { Form, Button, Container, Row, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../store/user/user";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,10 @@ const Login = () => {
   useEffect(() => {
     if (user.loggedIn) navigate("/pokemons");
   }, [user.loggedIn]);
+
+  useEffect(() => {
+    console.log("hi");
+  }, []);
 
   const login = (e) => {
     let email = emailRef.current.value;
@@ -75,13 +79,27 @@ const Login = () => {
           />
         </Form.Group>
         <Row>
-          <Button
-            variant="primary"
-            type="submit"
-            style={{ width: "25vw", margin: "auto", marginTop: "10px" }}
-          >
-            Login
-          </Button>
+          {user.userLoading ? (
+            <Button variant="primary" disabled>
+              <Spinner
+                as="span"
+                animation="grow"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+                style={{ marginTop: "10px" }}
+              />
+              Loading...
+            </Button>
+          ) : (
+            <Button
+              variant="primary"
+              type="submit"
+              style={{ width: "25vw", margin: "auto", marginTop: "10px" }}
+            >
+              Login
+            </Button>
+          )}
         </Row>
       </Form>
     </Container>

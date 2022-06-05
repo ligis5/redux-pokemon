@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 
 const auth = getAuth();
@@ -53,4 +54,12 @@ export const loginPersistence = () => {
       unsubscribe();
     });
   });
+};
+
+export const logoutUser = async () => {
+  try {
+    await signOut(auth);
+  } catch (error) {
+    return error;
+  }
 };
