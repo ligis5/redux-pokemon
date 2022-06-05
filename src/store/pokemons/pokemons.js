@@ -8,6 +8,7 @@ const slice = createSlice({
     loading: false,
     loaded: false,
     error: "",
+    currentPage: 1,
   },
   reducers: {
     pokemonsRequested: (pokemons, action) => {
@@ -20,12 +21,10 @@ const slice = createSlice({
       pokemons.error = "error";
     },
     allPokemons: (pokemons, action) => {
-      pokemons.list.push(...action.payload);
+      pokemons.list.push(...action.payload.pokemons);
+      pokemons.currentPage = action.payload.page;
       pokemons.loaded = true;
       pokemons.loading = false;
-    },
-    pokemonsRemoved: (pokemons, action) => {
-      pokemons.list.splice(action.payload.page * 20 - 20, 20);
     },
     allPokemonsRemoved: (pokemons, action) => {
       pokemons.list = [];
@@ -39,7 +38,6 @@ const slice = createSlice({
 const {
   allPokemons,
   pokemonsRequested,
-  pokemonsRemoved,
   pokemonsRequestFailed,
   allPokemonsRemoved,
 } = slice.actions;
@@ -47,8 +45,7 @@ const {
 export default slice.reducer;
 
 export const getPokemons = (page) => (disptach, getState) => {
-  // if (!getState().user.loggedIn) return;
-
+  // if (page < getState().pokemons.currentPage) return;
   disptach(
     apiCallBegan({
       page: page,

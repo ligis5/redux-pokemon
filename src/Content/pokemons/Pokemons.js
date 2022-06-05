@@ -10,18 +10,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { getPokemons } from "../../store/pokemons/pokemons";
 import { typeColors } from "./typeColors";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Pokemons = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const store = useSelector((store) => store.pokemons);
-  const [currentPage, setCurrentPage] = useState(1);
+  const user = useSelector((store) => store.user);
+  const [currentPage, setCurrentPage] = useState(store.currentPage);
 
   const morePokemons = () => {
     setCurrentPage(currentPage + 1);
   };
 
   useEffect(() => {
-    dispatch(getPokemons(currentPage));
+    if (currentPage !== store.currentPage || store.list.length === 0) {
+      dispatch(getPokemons(currentPage));
+    }
   }, [currentPage]);
 
   // takes type of pokemon and gets color of that type from typeColor array
@@ -42,22 +47,35 @@ const Pokemons = () => {
         style={{ backgroundColor: "white" }}
       >
         <ListGroup>
-          {Object.entries(stats).map((stat) => (
-            <ListGroup.Item
-              key={`${id}${stat[0]}${stat[1]}`}
-            >{`${stat[0]}: ${stat[1]}`}</ListGroup.Item>
-          ))}
+          {
+            // show pokemons stats like defense, attack. stat[0] is key stat[1] is value
+            Object.entries(stats).map((stat) => (
+              <ListGroup.Item
+                key={`${id}${stat[0]}${stat[1]}`}
+              >{`${stat[0]}: ${stat[1]}`}</ListGroup.Item>
+            ))
+          }
         </ListGroup>
       </Tooltip>
     );
   };
+  let emailToUsername = user.details.email.split("@")[0];
 
   return (
     <Container style={{ display: "grid" }} fluid>
       <h1 style={{ textAlign: "center", marginBottom: "100px" }}>Pokemons</h1>
+      <Button
+        onClick={() => navigate(`/${emailToUsername}/pokemons`)}
+        style={{
+          width: "fit-content",
+          justifySelf: "end",
+        }}
+      >
+        <h3>My pokemons {10}</h3>
+      </Button>
       {store.loaded ? (
         <ListGroup>
-          {store.list
+          {store.list // map all pokemons
             ? store.list.map((pokemon) => (
                 <ListGroup.Item
                   key={pokemon.id}
@@ -66,7 +84,6 @@ const Pokemons = () => {
                   <div>
                     <div style={{ display: "flex" }}>
                       {pokemon.type.map((type) => {
-                        // getColor(type);
                         return (
                           <div
                             variant="default"

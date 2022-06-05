@@ -15,9 +15,9 @@ const api =
       const response = await axios.request({
         url: `http://localhost:9001/api/pokemons?page=${page}`,
       });
-      dispatch(actions.apiCallSuccess(response.data));
 
-      if (onSuccess) dispatch({ type: onSuccess, payload: response.data });
+      let data = { pokemons: response.data, page };
+      if (onSuccess) dispatch({ type: onSuccess, payload: data });
     } catch (error) {
       dispatch(actions.apiCallFailed(error.message));
 

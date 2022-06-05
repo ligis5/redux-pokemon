@@ -7,6 +7,8 @@ import { Provider } from "react-redux";
 import configureStore from "./store/configureStore";
 import { ProtectedRoutes } from "./authentication/protectedRoutes";
 import Layout from "./Content/Layout";
+import User from "./Content/user/User";
+import UserPokemons from "./Content/userPokemons/UserPokemons";
 
 const store = configureStore();
 
@@ -49,6 +51,15 @@ function App() {
               </Layout>
             }
           />
+          <Route
+            path="/:user"
+            element={
+              <Layout>
+                <User />
+              </Layout>
+            }
+          />
+          <Route path="/:user/pokemons" element={<UserPokemons />} />
           <Route path="*" element={<p>There's nothing here: 404!</p>} />
         </Routes>
       </BrowserRouter>
