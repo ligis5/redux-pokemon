@@ -44,8 +44,7 @@ const {
 
 export default slice.reducer;
 
-export const getPokemons = (page) => (disptach, getState) => {
-  // if (page < getState().pokemons.currentPage) return;
+export const getPokemons = (page) => (disptach) => {
   disptach(
     apiCallBegan({
       page: page,

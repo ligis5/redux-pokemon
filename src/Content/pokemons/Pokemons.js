@@ -8,9 +8,10 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getPokemons } from "../../store/pokemons/pokemons";
-import { typeColors } from "./typeColors";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { addPokemon } from "../../store/userPokemons/userPokemons";
+import { GetColors } from "../../GetColor";
 
 const Pokemons = () => {
   const navigate = useNavigate();
@@ -24,19 +25,12 @@ const Pokemons = () => {
   };
 
   useEffect(() => {
-    if (currentPage !== store.currentPage || store.list.length === 0) {
+    if (currentPage !== store.currentPage || store.list.length === 0 && user.loggedIn) {
       dispatch(getPokemons(currentPage));
     }
-  }, [currentPage]);
+  }, [currentPage, user.loggedIn]);
 
-  // takes type of pokemon and gets color of that type from typeColor array
-  const getColor = (type) => {
-    let color = typeColors.filter(
-      (t) => Object.keys(t)[0] === type.toLowerCase()
-    );
-    if (color.length === 0) color = [{ none: "rgb(255, 255, 255)" }];
-    return color;
-  };
+  
 
   const renderTooltip = (stats, id, props) => {
     return (
@@ -73,7 +67,6 @@ const Pokemons = () => {
       >
         <h3>My pokemons {10}</h3>
       </Button>
-      {store.loaded ? (
         <ListGroup>
           {store.list // map all pokemons
             ? store.list.map((pokemon) => (
@@ -92,7 +85,7 @@ const Pokemons = () => {
                               borderRadius: "10%",
                               border: "1px solid black",
                               backgroundColor: Object.values(
-                                getColor(type)[0]
+                                GetColors(type)[0]
                               )[0],
                             }}
                             key={type}
@@ -118,16 +111,17 @@ const Pokemons = () => {
                       <h3>{pokemon.name.english}</h3>
                     </OverlayTrigger>
                   </div>
-                  <Button variant="outline-primary">Add</Button>
+                  <Button variant="outline-primary" onClick={() => dispatch(addPokemon(pokemon))}>Add</Button>
                 </ListGroup.Item>
               ))
             : null}
         </ListGroup>
+      
+      {store.loaded ? (
+      <Button onClick={morePokemons}>More</Button>
       ) : (
         <Spinner animation="grow" />
       )}
-
-      <Button onClick={morePokemons}>More</Button>
     </Container>
   );
 };

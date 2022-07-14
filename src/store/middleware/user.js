@@ -15,10 +15,9 @@ const userApi =
     if (action.type !== actions.userCallBegan.type) return next(action);
 
     const { onStart, onSuccess, onError, data, method } = action.payload;
-    next(action);
     //requestUser, userLoading: true
     if (onStart) dispatch({ type: onStart });
-
+    
     //log out, clear my pokemons, clear all pokemons
     if (method === "logout") {
       dispatch(actions.userCallSuccess());
@@ -29,7 +28,7 @@ const userApi =
       }
       if (onSuccess) dispatch(clearPokemons());
     }
-
+    
     if (method === "check") {
       const user = await loginPersistence();
       if (user === "No user found") {
@@ -38,19 +37,19 @@ const userApi =
         return;
       }
       let userData = { uid: user.uid, email: user.email };
-
-      //call for user login
-      dispatch(actions.userCallSuccess({ user: userData }));
-
+      
+      // //call for user login
+      dispatch(actions.userCallSuccess());
+      
       if (onSuccess) {
         dispatch({ type: onSuccess, payload: { user: userData } });
       } else dispatch({ type: onError, payload: "error logging in" });
     }
-
+    
     //create user
     if (method === "create") {
       let user = await registerWithEmail(data.email, data.password);
-
+      
       if (user === "Firebase: Error (auth/email-already-in-use).") {
         dispatch(actions.userCallFailed());
         dispatch({ type: onError, payload: "Email is already in use" });
@@ -75,8 +74,10 @@ const userApi =
       //login user
       if (onSuccess) {
         dispatch({ type: onSuccess, payload: { user: userData } });
+        next(action);
       } else dispatch({ type: onError, payload: "error logging in" });
     }
   };
-
-export default userApi;
+  
+  export default userApi;
+  

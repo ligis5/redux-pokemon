@@ -20,9 +20,10 @@ const api =
       if (onSuccess) dispatch({ type: onSuccess, payload: data });
     } catch (error) {
       dispatch(actions.apiCallFailed(error.message));
-
+      
       if (onError) dispatch({ type: onError, payload: error.message });
     }
+    
   };
 
 export default api;
