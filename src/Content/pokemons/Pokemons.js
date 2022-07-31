@@ -111,7 +111,7 @@ const Pokemons = () => {
                       <h3>{pokemon.name.english}</h3>
                     </OverlayTrigger>
                   </div>
-                  <Button variant="outline-primary" onClick={() => dispatch(addPokemon(pokemon))}>Add</Button>
+                  <Button variant="outline-primary" onClick={() => dispatch(addPokemon(pokemon.id))}>Add</Button>
                 </ListGroup.Item>
               ))
             : null}

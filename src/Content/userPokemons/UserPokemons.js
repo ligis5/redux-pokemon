@@ -28,6 +28,8 @@ const UserPokemons = () => {
   };
 
   const userPokemons = useSelector(store => store.userPokemons);
+
+  
   return <Container style={{ display: "grid" }} fluid>
   <h1 style={{ textAlign: "center", marginBottom: "100px" }}>My Pokemons</h1>
   {userPokemons.loaded ? (

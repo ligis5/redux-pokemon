@@ -6,6 +6,7 @@ import {
   logoutUser,
 } from "../../firebase/auth";
 import { clearPokemons } from "../pokemons/pokemons";
+import { getUserPokemons } from "../../firebase/database";
 
 const userApi =
   ({ dispatch, getState }) =>
@@ -43,6 +44,7 @@ const userApi =
       
       if (onSuccess) {
         dispatch({ type: onSuccess, payload: { user: userData } });
+        getUserPokemons(user.uid)
       } else dispatch({ type: onError, payload: "error logging in" });
     }
     

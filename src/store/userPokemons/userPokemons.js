@@ -19,7 +19,7 @@ const slice = createSlice({
         userPokemonsRequestFailed:(pokemons, action) => {
             pokemons.loaded = false;
             pokemons.loading = false;
-            pokemons.error = "error";
+            pokemons.error = action.payload.code;
         },
         allPokemons:(pokemons, action) => {
             pokemons.list.push(action.payload);
@@ -40,13 +40,21 @@ const {userPokemonsRequestFailed, userPokemonsRequested, allPokemons, pokemonAdd
 
 export default slice.reducer;
 
-export const addPokemon = (pokemon) => (dispatch) => {
+export const addPokemon = (pokemonId) => (dispatch) => {
     dispatch(
       userPokemonsCallBegan({
         type:'addPokemon',
-        pokemon,
+        pokemonId,
         onStart:userPokemonsRequested.type,
         onSuccess: pokemonAdded.type,
         onError:userPokemonsRequestFailed.type,
     }))
+}
+// to be made
+export const getUserPokemons = () => (dispatch) => {
+    dispatch(
+        userPokemonsCallBegan({
+
+        })
+    )
 }
